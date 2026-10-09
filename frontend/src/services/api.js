@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-const API_BASE = '/api';
+// API Base configuration (supports Vite env variables with deployed Render fallback)
+const API_BASE = 
+  import.meta.env?.VITE_API_URL 
+    ? `${import.meta.env.VITE_API_URL.replace(/\/+$/, '')}/api`
+    : 'https://fine-wise-ai-financial-decision-sup.onrender.com/api';
+
 
 export const api = {
   // 1. Upload files
