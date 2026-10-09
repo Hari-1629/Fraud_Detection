@@ -1,10 +1,20 @@
 import axios from 'axios';
 
-// API Base configuration (supports Vite env variables with deployed Render fallback)
-const API_BASE = 
-  import.meta.env?.VITE_API_URL 
-    ? `${import.meta.env.VITE_API_URL.replace(/\/+$/, '')}/api`
-    : 'https://fine-wise-ai-financial-decision-sup.onrender.com/api';
+// Dynamically resolve API Base URL
+const getApiBase = () => {
+  if (import.meta.env?.VITE_API_URL) {
+    const base = import.meta.env.VITE_API_URL.replace(/\/+$/, '');
+    return base.endsWith('/api') ? base : `${base}/api`;
+  }
+  // Local development uses Vite proxy to local backend (http://127.0.0.1:8000)
+  if (import.meta.env?.DEV) {
+    return '/api';
+  }
+  // Production fallback
+  return 'https://fine-wise-ai-financial-decision-sup.onrender.com/api';
+};
+
+const API_BASE = getApiBase();
 
 
 export const api = {
